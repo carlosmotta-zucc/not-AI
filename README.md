@@ -34,7 +34,7 @@ Cada etapa do pipeline corresponde a uma sprint. O que é implementado em uma sp
 
 | Sprint   | Capítulo   | Conteúdo                                                    | Status                        |
 | -------- | ---------- | ----------------------------------------------------------- | ----------------------------- |
-| Sprint 0 | Preparação | Ambiente, Git, PyTorch, estrutura do repositório            | Pronto                 |
+| Sprint 0 | Preparação | Ambiente, Git, PyTorch, estrutura do repositório            | Concluído                     |
 | Sprint 1 | Cap. 1     | Introdução a LLMs, glossário, Quiz 1, mapa conceitual GPT   | Glossário do Carlos/João concluído |
 | Sprint 2 | Cap. 2     | Tokenização, embeddings, positional embeddings, DataLoader  | Não iniciada                  |
 | Sprint 3 | Cap. 3     | Self-Attention, Causal Attention, Multi-Head Attention      | Não iniciada                  |

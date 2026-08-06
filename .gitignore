@@ -1,0 +1,30 @@
+CLAUDE.md
+
+# Ambiente virtual
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Corpora e checkpoints: arquivos grandes nao vao para o repositorio
+data/*
+!data/.gitkeep
+*.pt
+*.pth
+*.bin
+
+# Logs de experimento (os resultados analisados ficam versionados, o log bruto nao)
+experimentos/logs/
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store

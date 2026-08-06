@@ -1,0 +1,23 @@
+# Projeto LLM - Inteligencia Artificial e Sistemas Inteligentes (UNOESC)
+#
+# Maquina alvo: CPU apenas (Intel Raptor Lake-U, sem GPU NVIDIA).
+# O sufixo "+cpu" no pin do torch garante que o pacote venha do indice do
+# PyTorch abaixo, e nao do PyPI: o PyPI so publica o build com CUDA, que
+# arrastaria ~2,5 GB de bibliotecas NVIDIA inuteis nesta maquina.
+#
+# Instalacao:
+#   python3 -m venv venv
+#   source venv/bin/activate
+#   pip install -r requirements.txt
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+torch==2.13.0+cpu
+
+# Exploracao e experimentos das sprints
+jupyter==1.1.1
+matplotlib==3.11.1
+numpy==2.5.1
+
+# Tokenizador BPE (entra a partir do Cap. 2 / Sprint 2)
+tiktoken==0.13.0

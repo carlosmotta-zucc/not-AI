@@ -36,13 +36,20 @@ Cada etapa do pipeline corresponde a uma sprint. O que é implementado em uma sp
 | -------- | ---------- | ----------------------------------------------------------- | ----------------------------- |
 | Sprint 0 | Preparação | Ambiente, Git, PyTorch, estrutura do repositório            | Concluído                     |
 | Sprint 1 | Cap. 1     | Introdução a LLMs, glossário, Quiz 1, mapa conceitual GPT   | Glossário do Carlos/João concluído |
-| Sprint 2 | Cap. 2     | Tokenização, embeddings, positional embeddings, DataLoader  | Não iniciada                  |
+| Sprint 2 | Cap. 2     | Tokenização, embeddings, positional embeddings, DataLoader  | Frente A concluída; Frente B em andamento |
 | Sprint 3 | Cap. 3     | Self-Attention, Causal Attention, Multi-Head Attention      | Não iniciada                  |
 | Sprint 4 | Cap. 4     | Arquitetura GPT, Transformer Block, LayerNorm, FFN, geração | Não iniciada                  |
 | Sprint 5 | Cap. 5     | Treinamento, função de perda, otimizadores, avaliação       | Não iniciada                  |
 | Sprint 6 | Cap. 6 e 7 | Fine-tuning, integração, apresentação                       | Não iniciada                  |
 
 Ciclo de cada sprint: **Leitura → Glossário → Quiz → Implementação → Experimentação → Análise**.
+
+A Sprint 2 foi dividida em duas frentes:
+
+| Frente | Escopo                                                                 | Entregas                                                                                                                                                    |
+| ------ | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A      | Do texto ao Token ID: tokenização, vocabulário, comparativo com o BPE   | [`src/tokenizer/`](src/tokenizer/), [`tests/test_tokenizer.py`](tests/test_tokenizer.py), [análise](docs/sprint02/frente-a-analise.md) |
+| B      | Do Token ID ao lote: embeddings, positional embeddings, DataLoader      | `src/embeddings/`, `notebooks/sprint02/`                                                                                                                     |
 
 ## Estrutura do repositório
 
@@ -51,24 +58,31 @@ Ciclo de cada sprint: **Leitura → Glossário → Quiz → Implementação → 
 ├── README.md               # este arquivo
 ├── CLAUDE.md               # convenções do projeto e instruções para assistentes de IA
 ├── requirements.txt        # dependências (mantido sempre atualizado)
+├── check_environment.py    # verificação do ambiente (Sprint 0)
 ├── src/                    # implementações reutilizáveis entre sprints
-│   ├── tokenizer/
-│   ├── embeddings/
-│   ├── attention/
-│   ├── transformer/
-│   └── model/
-├── notebooks/              # exploração e experimentos, um diretório por sprint
-│   ├── sprint01/
-│   └── ...
+│   ├── corpus.py           # download e cache dos corpora
+│   ├── tokenizer/          # Sprint 2 — texto → tokens → Token IDs
+│   ├── embeddings/         # Sprint 2 — Token IDs → vetores
+│   ├── attention/          # Sprint 3
+│   ├── transformer/        # Sprint 4
+│   └── model/              # Sprint 4
+├── tests/                  # testes das implementações de src/
+├── notebooks/              # exploração e pipeline ponta a ponta, um diretório por sprint
+│   └── sprint02/
+├── experimentos/           # scripts de experimento e resultados, um diretório por sprint
+│   └── sprint02/
+│       └── resultados/     # tabelas geradas pelos scripts — não editar à mão
+├── docs/                   # análise técnica de cada sprint
+│   └── sprint02/
 ├── glossarios/             # glossário cumulativo, um diretório por integrante
 │   ├── carlos/
 │   └── joao/
-├── experimentos/           # configs, logs e resultados
-├── relatorios/             # documentação técnica de cada sprint
-└── data/                   # corpora de treino (arquivos grandes não são versionados)
+└── data/                   # corpora (não versionados, baixados sob demanda)
 ```
 
-Diretórios ainda não criados aparecem acima porque definem o destino do código que virá; hoje o repositório contém apenas `glossarios/`.
+Diretórios ainda não criados aparecem acima porque definem o destino do código que virá.
+
+A divisão entre `experimentos/` e `docs/` é deliberada: `experimentos/` guarda o script e a tabela que ele gera, `docs/` guarda a interpretação. Resultado sem interpretação não conta como análise — ver [docs/README.md](docs/README.md).
 
 ## Como rodar
 
@@ -96,6 +110,24 @@ Para verificar se o PyTorch enxerga a GPU (opcional — o projeto roda em CPU):
 python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
 ```
 
+Verificação completa do ambiente:
+
+```bash
+python check_environment.py
+```
+
+### Testes e experimentos
+
+```bash
+# testes das implementações de src/ (não requerem pytest)
+python tests/test_tokenizer.py
+
+# experimentos da Sprint 2, Frente A — regenera experimentos/sprint02/resultados/
+python experimentos/sprint02/frente_a_experimentos.py
+```
+
+Os corpora são baixados para `data/` na primeira execução; nada precisa ser obtido à mão.
+
 ## Convenções
 
 Detalhadas em [CLAUDE.md](CLAUDE.md). Em resumo:
@@ -114,7 +146,10 @@ O glossário é cumulativo, individual e vale nota. Ele não é uma tradução d
 
 Cada entrada traz definição, função no modelo, relação com outros conceitos e um exemplo — conceitual, matemático ou computacional.
 
-- [Capítulo 1 — Carlos](glossarios/carlos/glossario-cap1-llm.md)
+| Capítulo | Carlos                                                    | João                                              |
+| -------- | --------------------------------------------------------- | -------------------------------------------------- |
+| 1        | [glossário](glossarios/carlos/glossario-cap1-llm.md)      | [glossário](glossarios/joao/Glossario-cap01.md)    |
+| 2        | —                                                          | [glossário](glossarios/joao/Glossario-cap02.md)    |
 
 ## Experimentos
 
@@ -127,7 +162,13 @@ Cada experimento registra:
 3. Resultado (números, gráficos)
 4. Interpretação técnica, relacionada ao conceito estudado
 
-Resultado sem interpretação não conta como análise.
+Resultado sem interpretação não conta como análise. Por isso os itens 1 a 3 ficam em `experimentos/` (script e tabela gerada) e o item 4 em `docs/` (texto autoral, citando aqueles números).
+
+Análises publicadas:
+
+| Sprint | Documento                                                            | Cobre                                                              |
+| ------ | -------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| 2      | [Frente A](docs/sprint02/frente-a-analise.md)                        | Tokenização, vocabulário, Token IDs, comparativo com o BPE          |
 
 ## Avaliação
 

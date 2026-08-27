@@ -36,7 +36,7 @@ Cada etapa do pipeline corresponde a uma sprint. O que é implementado em uma sp
 | -------- | ---------- | ----------------------------------------------------------- | ----------------------------- |
 | Sprint 0 | Preparação | Ambiente, Git, PyTorch, estrutura do repositório            | Concluído                     |
 | Sprint 1 | Cap. 1     | Introdução a LLMs, glossário, Quiz 1, mapa conceitual GPT   | Glossário do Carlos/João concluído |
-| Sprint 2 | Cap. 2     | Tokenização, embeddings, positional embeddings, DataLoader  | Frente A concluída; Frente B em andamento |
+| Sprint 2 | Cap. 2     | Tokenização, embeddings, positional embeddings, DataLoader  | Concluída                     |
 | Sprint 3 | Cap. 3     | Self-Attention, Causal Attention, Multi-Head Attention      | Não iniciada                  |
 | Sprint 4 | Cap. 4     | Arquitetura GPT, Transformer Block, LayerNorm, FFN, geração | Não iniciada                  |
 | Sprint 5 | Cap. 5     | Treinamento, função de perda, otimizadores, avaliação       | Não iniciada                  |
@@ -49,19 +49,19 @@ A Sprint 2 foi dividida em duas frentes:
 | Frente | Escopo                                                                 | Entregas                                                                                                                                                    |
 | ------ | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | A      | Do texto ao Token ID: tokenização, vocabulário, comparativo com o BPE   | [`src/tokenizer/`](src/tokenizer/), [`tests/test_tokenizer.py`](tests/test_tokenizer.py), [análise](docs/sprint02/frente-a-analise.md) |
-| B      | Do Token ID ao lote: embeddings, positional embeddings, DataLoader      | `src/embeddings/`, `notebooks/sprint02/`                                                                                                                     |
+| B      | Do Token ID ao lote: janela deslizante, DataLoader, embeddings, positional embeddings | [`src/dataset/`](src/dataset/), [`src/embeddings/`](src/embeddings/), [`notebooks/sprint02/`](notebooks/sprint02/), [`tests/test_dataset.py`](tests/test_dataset.py), [`tests/test_embeddings.py`](tests/test_embeddings.py), [análise](docs/sprint02/frente-b-analise.md) |
 
 ## Estrutura do repositório
 
 ```
 .
 ├── README.md               # este arquivo
-├── CLAUDE.md               # convenções do projeto e instruções para assistentes de IA
 ├── requirements.txt        # dependências (mantido sempre atualizado)
 ├── check_environment.py    # verificação do ambiente (Sprint 0)
 ├── src/                    # implementações reutilizáveis entre sprints
 │   ├── corpus.py           # download e cache dos corpora
 │   ├── tokenizer/          # Sprint 2 — texto → tokens → Token IDs
+│   ├── dataset/            # Sprint 2 — Token IDs → pares (entrada, alvo) → lotes
 │   ├── embeddings/         # Sprint 2 — Token IDs → vetores
 │   ├── attention/          # Sprint 3
 │   ├── transformer/        # Sprint 4
@@ -121,16 +121,19 @@ python check_environment.py
 ```bash
 # testes das implementações de src/ (não requerem pytest)
 python tests/test_tokenizer.py
+python tests/test_dataset.py
+python tests/test_embeddings.py
 
-# experimentos da Sprint 2, Frente A — regenera experimentos/sprint02/resultados/
+# experimentos da Sprint 2 — regeneram experimentos/sprint02/resultados/
 python experimentos/sprint02/frente_a_experimentos.py
+python experimentos/sprint02/frente_b_experimentos.py
 ```
 
 Os corpora são baixados para `data/` na primeira execução; nada precisa ser obtido à mão.
 
 ## Convenções
 
-Detalhadas em [CLAUDE.md](CLAUDE.md). Em resumo:
+Resumo abaixo. O detalhamento completo, incluindo instruções voltadas a assistentes de IA, vive em `CLAUDE.md` — arquivo local, fora do controle de versão (`.gitignore`), então não chega em quem clona o repositório; as convenções que valem para qualquer colaborador estão resumidas aqui.
 
 - **Implementação autoral.** Nada de cópia integral do livro ou de repositórios públicos: nomes de variáveis, estrutura e comentários são próprios.
 - **Sem atalhos prontos.** `nn.MultiheadAttention`, `nn.Transformer` e equivalentes não substituem os componentes que a sprint pede para implementar — entram só como _baseline_ de comparação em experimentos.
@@ -149,7 +152,7 @@ Cada entrada traz definição, função no modelo, relação com outros conceito
 | Capítulo | Carlos                                                    | João                                              |
 | -------- | --------------------------------------------------------- | -------------------------------------------------- |
 | 1        | [glossário](glossarios/carlos/glossario-cap1-llm.md)      | [glossário](glossarios/joao/Glossario-cap01.md)    |
-| 2        | —                                                          | [glossário](glossarios/joao/Glossario-cap02.md)    |
+| 2        | [glossário](glossarios/carlos/glossario-cap2-dados-texto.md) | [glossário](glossarios/joao/Glossario-cap02.md)    |
 
 ## Experimentos
 
@@ -169,6 +172,7 @@ Análises publicadas:
 | Sprint | Documento                                                            | Cobre                                                              |
 | ------ | -------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | 2      | [Frente A](docs/sprint02/frente-a-analise.md)                        | Tokenização, vocabulário, Token IDs, comparativo com o BPE          |
+| 2      | [Frente B](docs/sprint02/frente-b-analise.md)                        | Janela deslizante, DataLoader, embeddings, positional embeddings    |
 
 ## Avaliação
 

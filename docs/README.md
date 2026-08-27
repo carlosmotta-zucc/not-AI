@@ -19,5 +19,6 @@ Regra prática: nada em `experimentos/resultados/` é editado à mão — se um 
 | Documento                                                | Cobre                                                                   |
 | -------------------------------------------------------- | ----------------------------------------------------------------------- |
 | [`sprint02/frente-a-analise.md`](sprint02/frente-a-analise.md) | Tokenização, vocabulário, Token IDs, comparativo com BPE. Questões 1 a 4 |
+| [`sprint02/frente-b-analise.md`](sprint02/frente-b-analise.md) | Janela deslizante, DataLoader, embeddings, positional embeddings. Questões 5 a 10 |
 
-Resultados correspondentes: [`experimentos/sprint02/resultados/frente-a.md`](../experimentos/sprint02/resultados/frente-a.md).
+Resultados correspondentes: [`experimentos/sprint02/resultados/frente-a.md`](../experimentos/sprint02/resultados/frente-a.md) e [`experimentos/sprint02/resultados/frente-b.md`](../experimentos/sprint02/resultados/frente-b.md).

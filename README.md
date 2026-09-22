@@ -37,7 +37,7 @@ Cada etapa do pipeline corresponde a uma sprint. O que é implementado em uma sp
 | Sprint 0 | Preparação | Ambiente, Git, PyTorch, estrutura do repositório            | Concluído                     |
 | Sprint 1 | Cap. 1     | Introdução a LLMs, glossário, Quiz 1, mapa conceitual GPT   | Glossário do Carlos/João concluído |
 | Sprint 2 | Cap. 2     | Tokenização, embeddings, positional embeddings, DataLoader  | Concluída                     |
-| Sprint 3 | Cap. 3     | Self-Attention, Causal Attention, Multi-Head Attention      | Não iniciada                  |
+| Sprint 3 | Cap. 3     | Self-Attention, Causal Attention, Multi-Head Attention      | Em andamento                  |
 | Sprint 4 | Cap. 4     | Arquitetura GPT, Transformer Block, LayerNorm, FFN, geração | Não iniciada                  |
 | Sprint 5 | Cap. 5     | Treinamento, função de perda, otimizadores, avaliação       | Não iniciada                  |
 | Sprint 6 | Cap. 6 e 7 | Fine-tuning, integração, apresentação                       | Não iniciada                  |
@@ -63,12 +63,13 @@ A Sprint 2 foi dividida em duas frentes:
 │   ├── tokenizer/          # Sprint 2 — texto → tokens → Token IDs
 │   ├── dataset/            # Sprint 2 — Token IDs → pares (entrada, alvo) → lotes
 │   ├── embeddings/         # Sprint 2 — Token IDs → vetores
-│   ├── attention/          # Sprint 3
+│   ├── attention/          # Sprint 3 — vetores → vetores de contexto
 │   ├── transformer/        # Sprint 4
 │   └── model/              # Sprint 4
 ├── tests/                  # testes das implementações de src/
 ├── notebooks/              # exploração e pipeline ponta a ponta, um diretório por sprint
-│   └── sprint02/
+│   ├── sprint02/
+│   └── sprint03/
 ├── experimentos/           # scripts de experimento e resultados, um diretório por sprint
 │   └── sprint02/
 │       └── resultados/     # tabelas geradas pelos scripts — não editar à mão
@@ -123,6 +124,7 @@ python check_environment.py
 python tests/test_tokenizer.py
 python tests/test_dataset.py
 python tests/test_embeddings.py
+python tests/test_self_attention.py
 
 # experimentos da Sprint 2 — regeneram experimentos/sprint02/resultados/
 python experimentos/sprint02/frente_a_experimentos.py

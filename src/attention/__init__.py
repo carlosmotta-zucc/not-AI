@@ -29,18 +29,25 @@ Decisoes que o resto do codigo segue:
 Experimentos em experimentos/sprint03/, analise em docs/sprint03/analise.md.
 """
 
+from .causal import CausalAttention, causal_mask
+from .multi_head import (
+    MultiHeadAttention,
+    MultiHeadAttentionWrapper,
+    head_dimension,
+)
 from .scaled_dot_product import scaled_dot_product_attention
 from .self_attention import SelfAttention
 from .simplified import EXAMPLE_INPUTS, EXAMPLE_WORDS, simplified_attention
 
-# O resto entra conforme cada modulo nascer:
-#   from .causal import CausalAttention, causal_mask
-#   from .multi_head import MultiHeadAttention, MultiHeadAttentionWrapper
-
 __all__ = [
     "EXAMPLE_INPUTS",
     "EXAMPLE_WORDS",
+    "CausalAttention",
+    "MultiHeadAttention",
+    "MultiHeadAttentionWrapper",
     "SelfAttention",
+    "causal_mask",
+    "head_dimension",
     "scaled_dot_product_attention",
     "simplified_attention",
 ]

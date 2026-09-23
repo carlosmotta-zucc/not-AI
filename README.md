@@ -125,6 +125,9 @@ python tests/test_tokenizer.py
 python tests/test_dataset.py
 python tests/test_embeddings.py
 python tests/test_self_attention.py
+python tests/test_causal_attention.py
+python tests/test_multi_head_attention.py
+python tests/test_attention_pipeline.py
 
 # experimentos da Sprint 2 — regeneram experimentos/sprint02/resultados/
 python experimentos/sprint02/frente_a_experimentos.py

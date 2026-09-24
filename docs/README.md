@@ -22,3 +22,11 @@ Regra prática: nada em `experimentos/resultados/` é editado à mão — se um 
 | [`sprint02/frente-b-analise.md`](sprint02/frente-b-analise.md) | Janela deslizante, DataLoader, embeddings, positional embeddings. Questões 5 a 10 |
 
 Resultados correspondentes: [`experimentos/sprint02/resultados/frente-a.md`](../experimentos/sprint02/resultados/frente-a.md) e [`experimentos/sprint02/resultados/frente-b.md`](../experimentos/sprint02/resultados/frente-b.md).
+
+### Sprint 3 — Capítulo 3: atenção
+
+| Documento                                        | Cobre                                                                                   |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| [`sprint03/analise.md`](sprint03/analise.md)     | Self-attention, escala por √d_k, custo em d e T, atenção causal, dropout, multi-head, entrega para a Sprint 4 |
+
+Resultados correspondentes: [`experimentos/sprint03/resultados/atencao.md`](../experimentos/sprint03/resultados/atencao.md).

@@ -71,8 +71,11 @@ A Sprint 2 foi dividida em duas frentes:
 │   ├── sprint02/
 │   └── sprint03/
 ├── experimentos/           # scripts de experimento e resultados, um diretório por sprint
-│   └── sprint02/
-│       └── resultados/     # tabelas geradas pelos scripts — não editar à mão
+│   ├── sprint02/
+│   │   └── resultados/     # tabelas geradas pelos scripts — não editar à mão
+│   └── sprint03/
+│       └── resultados/     # tabelas e figuras geradas — não editar à mão
+│           └── figuras/
 ├── docs/                   # análise técnica de cada sprint
 │   └── sprint02/
 ├── glossarios/             # glossário cumulativo, um diretório por integrante
@@ -132,6 +135,9 @@ python tests/test_attention_pipeline.py
 # experimentos da Sprint 2 — regeneram experimentos/sprint02/resultados/
 python experimentos/sprint02/frente_a_experimentos.py
 python experimentos/sprint02/frente_b_experimentos.py
+
+# experimentos da Sprint 3 — regeneram experimentos/sprint03/resultados/ e as figuras
+python experimentos/sprint03/atencao_experimentos.py
 ```
 
 Os corpora são baixados para `data/` na primeira execução; nada precisa ser obtido à mão.

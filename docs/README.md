@@ -30,3 +30,16 @@ Resultados correspondentes: [`experimentos/sprint02/resultados/frente-a.md`](../
 | [`sprint03/analise.md`](sprint03/analise.md)     | Self-attention, escala por √d_k, custo em d e T, atenção causal, dropout, multi-head, entrega para a Sprint 4 |
 
 Resultados correspondentes: [`experimentos/sprint03/resultados/atencao.md`](../experimentos/sprint03/resultados/atencao.md).
+
+### Sprint 4 — Capítulo 4: arquitetura GPT
+
+Ponto de entrada: [`sprint04/README.md`](sprint04/README.md), com o mapa entregável → código → testes → experimentos.
+
+| Documento                                                                    | Cobre                                                                                         |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| [`sprint04/01-transformer-block.md`](sprint04/01-transformer-block.md)       | Entregável 2: estrutura do bloco, função de cada componente, dimensões dos tensores            |
+| [`sprint04/02-modelo-gpt.md`](sprint04/02-modelo-gpt.md)                     | Entregável 3: organização do GPTModel, caminho até os logits, parâmetros por componente        |
+| [`sprint04/03-inferencia-e-geracao.md`](sprint04/03-inferencia-e-geracao.md) | Entregável 4: logits → probabilidades → token, laço autoregressivo, eval() e reprodutibilidade |
+| [`sprint04/04-experimentos-e-analise.md`](sprint04/04-experimentos-e-analise.md) | Entregável 5: configuração, resultados e análise de cada experimento                        |
+
+Resultados correspondentes: [`experimentos/sprint04/resultados/livro.md`](../experimentos/sprint04/resultados/livro.md) (exemplos do livro reproduzidos), [`arquitetura.md`](../experimentos/sprint04/resultados/arquitetura.md) e [`geracao.md`](../experimentos/sprint04/resultados/geracao.md).

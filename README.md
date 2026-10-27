@@ -37,8 +37,8 @@ Cada etapa do pipeline corresponde a uma sprint. O que é implementado em uma sp
 | Sprint 0 | Preparação | Ambiente, Git, PyTorch, estrutura do repositório            | Concluído                     |
 | Sprint 1 | Cap. 1     | Introdução a LLMs, glossário, Quiz 1, mapa conceitual GPT   | Glossário do Carlos/João concluído |
 | Sprint 2 | Cap. 2     | Tokenização, embeddings, positional embeddings, DataLoader  | Concluída                     |
-| Sprint 3 | Cap. 3     | Self-Attention, Causal Attention, Multi-Head Attention      | Em andamento                  |
-| Sprint 4 | Cap. 4     | Arquitetura GPT, Transformer Block, LayerNorm, FFN, geração | Não iniciada                  |
+| Sprint 3 | Cap. 3     | Self-Attention, Causal Attention, Multi-Head Attention      | Concluída                 |
+| Sprint 4 | Cap. 4     | Arquitetura GPT, Transformer Block, LayerNorm, FFN, geração | Concluída                  |
 | Sprint 5 | Cap. 5     | Treinamento, função de perda, otimizadores, avaliação       | Não iniciada                  |
 | Sprint 6 | Cap. 6 e 7 | Fine-tuning, integração, apresentação                       | Não iniciada                  |
 
@@ -64,20 +64,27 @@ A Sprint 2 foi dividida em duas frentes:
 │   ├── dataset/            # Sprint 2 — Token IDs → pares (entrada, alvo) → lotes
 │   ├── embeddings/         # Sprint 2 — Token IDs → vetores
 │   ├── attention/          # Sprint 3 — vetores → vetores de contexto
-│   ├── transformer/        # Sprint 4
-│   └── model/              # Sprint 4
-├── tests/                  # testes das implementações de src/
+│   ├── transformer/        # Sprint 4 — LayerNorm, GELU, FeedForward, TransformerBlock
+│   ├── model/              # Sprint 4 — GPTConfig e GPTModel: Token IDs → logits
+│   └── generation/         # Sprint 4 — logits → próximo token; geração autoregressiva
+├── tests/                  # testes das implementações de src/ e checkpoints do livro
 ├── notebooks/              # exploração e pipeline ponta a ponta, um diretório por sprint
 │   ├── sprint02/
-│   └── sprint03/
+│   ├── sprint03/
+│   └── sprint04/
 ├── experimentos/           # scripts de experimento e resultados, um diretório por sprint
 │   ├── sprint02/
 │   │   └── resultados/     # tabelas geradas pelos scripts — não editar à mão
-│   └── sprint03/
+│   ├── sprint03/
+│   │   └── resultados/     # tabelas e figuras geradas — não editar à mão
+│   │       └── figuras/
+│   └── sprint04/
 │       └── resultados/     # tabelas e figuras geradas — não editar à mão
 │           └── figuras/
 ├── docs/                   # análise técnica de cada sprint
-│   └── sprint02/
+│   ├── sprint02/
+│   ├── sprint03/
+│   └── sprint04/           # um documento por entregável; README.md é o ponto de entrada
 ├── glossarios/             # glossário cumulativo, um diretório por integrante
 │   ├── carlos/
 │   └── joao/
@@ -131,6 +138,12 @@ python tests/test_self_attention.py
 python tests/test_causal_attention.py
 python tests/test_multi_head_attention.py
 python tests/test_attention_pipeline.py
+python tests/test_transformer_components.py
+python tests/test_transformer_block.py
+python tests/test_gpt_model.py
+python tests/test_generation.py
+python tests/test_gpt_pipeline.py
+python tests/test_book_checkpoints.py      # monta o GPT de 124M (~650 MB de RAM)
 
 # experimentos da Sprint 2 — regeneram experimentos/sprint02/resultados/
 python experimentos/sprint02/frente_a_experimentos.py
@@ -138,6 +151,11 @@ python experimentos/sprint02/frente_b_experimentos.py
 
 # experimentos da Sprint 3 — regeneram experimentos/sprint03/resultados/ e as figuras
 python experimentos/sprint03/atencao_experimentos.py
+
+# experimentos da Sprint 4 — regeneram experimentos/sprint04/resultados/ e as figuras
+python experimentos/sprint04/livro_exemplos.py
+python experimentos/sprint04/arquitetura_experimentos.py
+python experimentos/sprint04/geracao_experimentos.py
 ```
 
 Os corpora são baixados para `data/` na primeira execução; nada precisa ser obtido à mão.
@@ -178,12 +196,20 @@ Cada experimento registra:
 
 Resultado sem interpretação não conta como análise. Por isso os itens 1 a 3 ficam em `experimentos/` (script e tabela gerada) e o item 4 em `docs/` (texto autoral, citando aqueles números).
 
+A partir da Sprint 4, os exemplos do livro também viram experimento: [`experimentos/sprint04/livro_exemplos.py`](experimentos/sprint04/livro_exemplos.py) refaz cada exemplo do capítulo com o código de `src/` e publica o valor do livro ao lado do obtido, e [`tests/test_book_checkpoints.py`](tests/test_book_checkpoints.py) afirma que os dois coincidem. Os valores impressos no livro ficam num lugar só, [`tests/book_reference.py`](tests/book_reference.py), com a página de cada um.
+
 Análises publicadas:
 
 | Sprint | Documento                                                            | Cobre                                                              |
 | ------ | -------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | 2      | [Frente A](docs/sprint02/frente-a-analise.md)                        | Tokenização, vocabulário, Token IDs, comparativo com o BPE          |
 | 2      | [Frente B](docs/sprint02/frente-b-analise.md)                        | Janela deslizante, DataLoader, embeddings, positional embeddings    |
+| 3      | [Análise](docs/sprint03/analise.md)                                  | Self-attention, escala, atenção causal, dropout, multi-head          |
+| 4      | [Visão geral](docs/sprint04/README.md)                               | Mapa das entregas, configuração base, principais resultados          |
+| 4      | [Transformer Block](docs/sprint04/01-transformer-block.md)           | Estrutura do bloco, função de cada componente, dimensões             |
+| 4      | [Modelo GPT](docs/sprint04/02-modelo-gpt.md)                         | Organização do GPTModel, logits, parâmetros por componente           |
+| 4      | [Inferência e geração](docs/sprint04/03-inferencia-e-geracao.md)     | Logits → probabilidades → token, laço autoregressivo                 |
+| 4      | [Experimentos e análise](docs/sprint04/04-experimentos-e-analise.md) | Arquitetura, contexto, dropout, ablação, temperatura, top-k, custo   |
 
 ## Avaliação
 

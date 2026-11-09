@@ -1,11 +1,14 @@
 """Valores impressos no livro, com a página de cada um.
 
-Fonte única para tests/test_book_checkpoints.py (que afirma que o projeto
-reproduz cada número) e para experimentos/sprint04/livro_exemplos.py (que
-publica a comparação lado a lado). Só dados: nenhuma conta aqui.
+Fonte única para os testes que afirmam que o projeto reproduz cada número
+(tests/test_book_checkpoints.py e tests/test_book_checkpoints_ch5.py) e para
+os scripts que publicam a comparação lado a lado
+(experimentos/sprint04/livro_exemplos.py e experimentos/sprint05/livro_exemplos.py).
+Só dados: nenhuma conta aqui.
 
 Referência: RASCHKA, S. Build a Large Language Model (From Scratch). Manning,
-2024. Capítulo 4 inteiro, seção 5.3 e apêndice C (exercícios 4.1, 4.2 e 5.1).
+2024. Capítulo 4 inteiro, seções 5.1 a 5.3 e apêndice C (exercícios 4.1, 4.2
+e 5.1).
 
 Os logits do livro são impressos truncados (três primeiros e três últimos
 valores de cada linha, quatro casas). É o que se compara aqui, com tolerância
@@ -123,6 +126,109 @@ GENERATION_PROMPT_IDS = [15496, 11, 314, 716]
 GENERATION_NEW_TOKENS = 6
 GENERATION_OUTPUT_IDS = [15496, 11, 314, 716, 27018, 24086, 47843, 30961, 42348, 7267]
 GENERATION_OUTPUT_TEXT = "Hello, I am Featureiman Byeswickattribute argue"
+
+# --- Capítulo 5, seções 5.1 e 5.2: avaliação e treino ---
+
+# O modelo do capítulo é o GPT-2 small com contexto reduzido de 1 024 para 256
+# (p. 130), criado com a mesma seed 123.
+CH5_CONTEXT_LENGTH = 256
+
+# --- Seção 5.1.1, p. 130-132: geração antes do treino ---
+
+START_CONTEXT = "Every effort moves you"
+START_CONTEXT_IDS = [6109, 3626, 6100, 345]  # figura 5.3, p. 131
+UNTRAINED_NEW_TOKENS = 10
+# O projeto gera "wasnم": o modelo escolhe um token com a letra árabe mim
+# (U+0645), que a impressão do livro mostra como "?". O resto coincide letra a
+# letra; a comparação troca essa letra por "?".
+UNTRAINED_OUTPUT_TEXT = "Every effort moves you rentingetic wasn? refres RexMeCHicular stren"
+UNPRINTABLE_IN_BOOK = "م"
+
+# --- Seção 5.1.2, p. 133-140: a perda passo a passo ---
+
+LOSS_INPUTS = [[16833, 3626, 6100], [40, 1107, 588]]  # "every effort moves", "I really like"
+LOSS_TARGETS = [[3626, 6100, 345], [1107, 588, 11311]]  # " effort moves you", " really like chocolate"
+PROBAS_SHAPE = (2, 3, 50_257)  # p. 134
+LOSS_ARGMAX_IDS = [[16657, 339, 42826], [49906, 29669, 41751]]  # p. 134
+TARGETS_TEXT_1 = " effort moves you"  # p. 134
+OUTPUTS_TEXT_1 = " Armed heNetflix"
+# Figura 5.7, p. 137: os três primeiros logits e probabilidades da 1ª posição.
+FIRST_LOGITS = [0.1113, -0.1057, -0.3666]
+FIRST_PROBAS = [1.8849e-05, 1.5172e-05, 1.1687e-05]
+# p. 136: probabilidade dada ao token-alvo em cada posição dos dois textos.
+TARGET_PROBAS = [
+    [7.4541e-05, 3.1061e-05, 1.1563e-05],
+    [1.0337e-05, 5.6776e-05, 4.7559e-06],
+]
+LOG_PROBAS = [-9.5042, -10.3796, -11.3677, -11.4798, -9.7764, -12.2561]  # p. 137
+AVG_LOG_PROBA = -10.7940  # p. 138
+CROSS_ENTROPY = 10.7940  # p. 138-139, à mão e por F.cross_entropy
+FLAT_LOGITS_SHAPE = (6, 50_257)  # p. 139
+FLAT_TARGETS_SHAPE = (6,)
+PERPLEXITY = 48_725.8203  # p. 140, torch.exp(loss) em float32
+
+# --- Seção 5.1.3, p. 140-145: perdas de treino e validação ---
+
+VERDICT_CHARS = 20_479  # p. 141
+VERDICT_TOKENS = 5_145
+TRAIN_RATIO = 0.90  # p. 142
+LOADER_BATCH_SIZE = 2  # p. 143
+LOADER_BATCH_SHAPE = (2, 256)
+TRAIN_BATCHES = 9  # p. 143-144
+VAL_BATCHES = 1  # p. 144
+# p. 145: o modelo sem treino, em eval(), sobre os loaders inteiros.
+INITIAL_TRAIN_LOSS = 10.98758347829183
+INITIAL_VAL_LOSS = 10.98110580444336
+# O livro imprime 16 algarismos. A perda de treino é a média de 9 perdas de
+# lote em float32, e qual sequência cai em qual lote depende do embaralhamento:
+# a 7ª casa já sente o arredondamento. 1e-6 separa isso de uma diferença real.
+INITIAL_LOSS_TOLERANCE = 1e-6
+
+# --- Seção 5.2, p. 147-150: o treino de 10 épocas ---
+
+LEARNING_RATE = 0.0004  # p. 149
+WEIGHT_DECAY = 0.1
+NUM_EPOCHS = 10
+EVAL_FREQ = 5
+EVAL_ITER = 5
+SAMPLE_TOKENS = 50  # generate_and_print_sample, p. 148
+# As linhas do log que o livro imprime (o resto é omitido com "[...]"):
+# passo -> (época, perda de treino, perda de validação), com 3 casas.
+TRAINING_LOG = {
+    0: (1, 9.781, 9.933),
+    5: (1, 8.111, 8.339),
+    10: (2, 6.661, 7.048),
+    15: (2, 5.961, 6.616),
+    80: (9, 0.541, 6.393),
+    85: (10, 0.391, 6.452),
+}
+LOSS_PRINT_TOLERANCE = 5e-4  # meia unidade na 3ª casa
+# A amostra gulosa do fim de cada época, com as quebras de linha trocadas por
+# espaço. O livro a imprime quebrada em linhas e sem os espaços do fim: a
+# comparação ignora a quantidade de espaços.
+EPOCH_SAMPLES = {
+    1: "Every effort moves you,,,,,,,,,,,,.",
+    2: (
+        "Every effort moves you, and, and, and, and, and, and, and, and, and, and, and,"
+        " and, and, and, and, and, and, and, and, and, and, and,, and, and,"
+    ),
+    9: (
+        'Every effort moves you?"  "Yes--quite insensible to the irony. She wanted'
+        ' him vindicated--and by me!"  He laughed again, and threw back the'
+        ' window-curtains, I had the donkey. "There were days when I'
+    ),
+    10: (
+        'Every effort moves you know," was one of the axioms he laid down across the'
+        " Sevres and silver of an exquisitely appointed luncheon-table, when, on a"
+        " later day, I had again run over from Monte Carlo; and Mrs. Gis"
+    ),
+}
+# p. 150: o trecho gerado que o livro procura no conto para mostrar que o
+# modelo decorou o texto de treino.
+MEMORIZED_SNIPPET = "quite insensible to the irony"
+# p. 150, figura 5.12: as duas perdas caem juntas na 1ª época e se separam
+# depois da 2ª.
+DIVERGENCE_EPOCH = 2
 
 # --- Seção 5.3, p. 152-157 e exercício 5.1 (p. 304): o vocabulário de 9 palavras ---
 

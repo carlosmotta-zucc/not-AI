@@ -39,7 +39,7 @@ Cada etapa do pipeline corresponde a uma sprint. O que é implementado em uma sp
 | Sprint 2 | Cap. 2     | Tokenização, embeddings, positional embeddings, DataLoader  | Concluída                     |
 | Sprint 3 | Cap. 3     | Self-Attention, Causal Attention, Multi-Head Attention      | Concluída                 |
 | Sprint 4 | Cap. 4     | Arquitetura GPT, Transformer Block, LayerNorm, FFN, geração | Concluída                  |
-| Sprint 5 | Cap. 5     | Treinamento, função de perda, otimizadores, avaliação       | Não iniciada                  |
+| Sprint 5 | Cap. 5     | Treinamento, função de perda, otimizadores, avaliação       | Em andamento                  |
 | Sprint 6 | Cap. 6 e 7 | Fine-tuning, integração, apresentação                       | Não iniciada                  |
 
 Ciclo de cada sprint: **Leitura → Glossário → Quiz → Implementação → Experimentação → Análise**.
@@ -66,7 +66,8 @@ A Sprint 2 foi dividida em duas frentes:
 │   ├── attention/          # Sprint 3 — vetores → vetores de contexto
 │   ├── transformer/        # Sprint 4 — LayerNorm, GELU, FeedForward, TransformerBlock
 │   ├── model/              # Sprint 4 — GPTConfig e GPTModel: Token IDs → logits
-│   └── generation/         # Sprint 4 — logits → próximo token; geração autoregressiva
+│   ├── generation/         # Sprint 4 — logits → próximo token; geração autoregressiva
+│   └── training/           # Sprint 5 — perda, perplexidade, laço de treino, TrainingConfig
 ├── tests/                  # testes das implementações de src/ e checkpoints do livro
 ├── notebooks/              # exploração e pipeline ponta a ponta, um diretório por sprint
 │   ├── sprint02/
@@ -78,13 +79,17 @@ A Sprint 2 foi dividida em duas frentes:
 │   ├── sprint03/
 │   │   └── resultados/     # tabelas e figuras geradas — não editar à mão
 │   │       └── figuras/
-│   └── sprint04/
+│   ├── sprint04/
+│   │   └── resultados/     # tabelas e figuras geradas — não editar à mão
+│   │       └── figuras/
+│   └── sprint05/
 │       └── resultados/     # tabelas e figuras geradas — não editar à mão
 │           └── figuras/
 ├── docs/                   # análise técnica de cada sprint
 │   ├── sprint02/
 │   ├── sprint03/
-│   └── sprint04/           # um documento por entregável; README.md é o ponto de entrada
+│   ├── sprint04/           # um documento por entregável; README.md é o ponto de entrada
+│   └── sprint05/           # idem
 ├── glossarios/             # glossário cumulativo, um diretório por integrante
 │   ├── carlos/
 │   └── joao/
@@ -144,6 +149,8 @@ python tests/test_gpt_model.py
 python tests/test_generation.py
 python tests/test_gpt_pipeline.py
 python tests/test_book_checkpoints.py      # monta o GPT de 124M (~650 MB de RAM)
+python tests/test_training.py
+python tests/test_book_checkpoints_ch5.py  # treina o GPT de 124M por 6 passos (~3 GB de RAM, ~30 s)
 
 # experimentos da Sprint 2 — regeneram experimentos/sprint02/resultados/
 python experimentos/sprint02/frente_a_experimentos.py
@@ -156,6 +163,11 @@ python experimentos/sprint03/atencao_experimentos.py
 python experimentos/sprint04/livro_exemplos.py
 python experimentos/sprint04/arquitetura_experimentos.py
 python experimentos/sprint04/geracao_experimentos.py
+
+# experimentos da Sprint 5 — regeneram experimentos/sprint05/resultados/ e as figuras
+python experimentos/sprint05/livro_exemplos.py          # treina o GPT de 124M do livro (~4 min)
+python experimentos/sprint05/avaliacao_experimentos.py  # ~2 min
+python experimentos/sprint05/treino_experimentos.py     # ~15 min
 ```
 
 Os corpora são baixados para `data/` na primeira execução; nada precisa ser obtido à mão.
@@ -196,7 +208,7 @@ Cada experimento registra:
 
 Resultado sem interpretação não conta como análise. Por isso os itens 1 a 3 ficam em `experimentos/` (script e tabela gerada) e o item 4 em `docs/` (texto autoral, citando aqueles números).
 
-A partir da Sprint 4, os exemplos do livro também viram experimento: [`experimentos/sprint04/livro_exemplos.py`](experimentos/sprint04/livro_exemplos.py) refaz cada exemplo do capítulo com o código de `src/` e publica o valor do livro ao lado do obtido, e [`tests/test_book_checkpoints.py`](tests/test_book_checkpoints.py) afirma que os dois coincidem. Os valores impressos no livro ficam num lugar só, [`tests/book_reference.py`](tests/book_reference.py), com a página de cada um.
+A partir da Sprint 4, os exemplos do livro também viram experimento: [`experimentos/sprint04/livro_exemplos.py`](experimentos/sprint04/livro_exemplos.py) refaz cada exemplo do capítulo com o código de `src/` e publica o valor do livro ao lado do obtido, e [`tests/test_book_checkpoints.py`](tests/test_book_checkpoints.py) afirma que os dois coincidem. Na Sprint 5, o mesmo vale para a avaliação e o treino ([`experimentos/sprint05/livro_exemplos.py`](experimentos/sprint05/livro_exemplos.py) e [`tests/test_book_checkpoints_ch5.py`](tests/test_book_checkpoints_ch5.py)): o treino de 10 épocas do capítulo é refeito em CPU e reproduz o log e as amostras de texto impressos. Os valores impressos no livro ficam num lugar só, [`tests/book_reference.py`](tests/book_reference.py), com a página de cada um.
 
 Análises publicadas:
 
@@ -210,6 +222,10 @@ Análises publicadas:
 | 4      | [Modelo GPT](docs/sprint04/02-modelo-gpt.md)                         | Organização do GPTModel, logits, parâmetros por componente           |
 | 4      | [Inferência e geração](docs/sprint04/03-inferencia-e-geracao.md)     | Logits → probabilidades → token, laço autoregressivo                 |
 | 4      | [Experimentos e análise](docs/sprint04/04-experimentos-e-analise.md) | Arquitetura, contexto, dropout, ablação, temperatura, top-k, custo   |
+| 5      | [Visão geral](docs/sprint05/README.md)                               | Mapa das entregas, configuração do treino, principais resultados     |
+| 5      | [Avaliação do modelo](docs/sprint05/01-avaliacao-do-modelo.md)       | Cross-entropy, perplexidade, perdas de treino e validação            |
+| 5      | [Treinamento](docs/sprint05/02-treinamento.md)                       | Laço de treino, AdamW, hiperparâmetros, reprodução do livro          |
+| 5      | [Experimentos de treinamento](docs/sprint05/03-experimentos-de-treinamento.md) | Épocas, taxa de aprendizado, lote, regularização, sobreajuste, custo |
 
 ## Avaliação
 

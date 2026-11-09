@@ -43,3 +43,15 @@ Ponto de entrada: [`sprint04/README.md`](sprint04/README.md), com o mapa entreg�
 | [`sprint04/04-experimentos-e-analise.md`](sprint04/04-experimentos-e-analise.md) | Entregável 5: configuração, resultados e análise de cada experimento                        |
 
 Resultados correspondentes: [`experimentos/sprint04/resultados/livro.md`](../experimentos/sprint04/resultados/livro.md) (exemplos do livro reproduzidos), [`arquitetura.md`](../experimentos/sprint04/resultados/arquitetura.md) e [`geracao.md`](../experimentos/sprint04/resultados/geracao.md).
+
+### Sprint 5 — Capítulo 5: pré-treinamento
+
+Ponto de entrada: [`sprint05/README.md`](sprint05/README.md), com o mapa entregável → código → testes → experimentos.
+
+| Documento                                                                    | Cobre                                                                                         |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| [`sprint05/01-avaliacao-do-modelo.md`](sprint05/01-avaliacao-do-modelo.md)   | Entregável 2: cross-entropy, perplexidade, perdas de treino e validação, estado inicial e evolução |
+| [`sprint05/02-treinamento.md`](sprint05/02-treinamento.md)                   | Entregável 3: laço de treino, AdamW, hiperparâmetros registrados, reprodução do livro          |
+| [`sprint05/03-experimentos-de-treinamento.md`](sprint05/03-experimentos-de-treinamento.md) | Entregável 4: épocas, taxa de aprendizado, lote, regularização, sobreajuste, custo |
+
+Resultados correspondentes: [`experimentos/sprint05/resultados/livro.md`](../experimentos/sprint05/resultados/livro.md) (exemplos do livro reproduzidos), [`avaliacao.md`](../experimentos/sprint05/resultados/avaliacao.md) e [`treino.md`](../experimentos/sprint05/resultados/treino.md).

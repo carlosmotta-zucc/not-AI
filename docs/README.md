@@ -53,5 +53,7 @@ Ponto de entrada: [`sprint05/README.md`](sprint05/README.md), com o mapa entreg�
 | [`sprint05/01-avaliacao-do-modelo.md`](sprint05/01-avaliacao-do-modelo.md)   | Entregável 2: cross-entropy, perplexidade, perdas de treino e validação, estado inicial e evolução |
 | [`sprint05/02-treinamento.md`](sprint05/02-treinamento.md)                   | Entregável 3: laço de treino, AdamW, hiperparâmetros registrados, reprodução do livro          |
 | [`sprint05/03-experimentos-de-treinamento.md`](sprint05/03-experimentos-de-treinamento.md) | Entregável 4: épocas, taxa de aprendizado, lote, regularização, sobreajuste, custo |
+| [`sprint05/04-estrategias-de-geracao.md`](sprint05/04-estrategias-de-geracao.md) | Entregável 5: gulosa, amostragem, temperatura e top-k no modelo treinado; o que é efeito da estratégia e o que é efeito do treino |
+| [`sprint05/05-salvamento-e-carregamento.md`](sprint05/05-salvamento-e-carregamento.md) | Entregável 6: o que vai no arquivo, ida e volta, o modelo carregado gerando texto, retomada do treino |
 
-Resultados correspondentes: [`experimentos/sprint05/resultados/livro.md`](../experimentos/sprint05/resultados/livro.md) (exemplos do livro reproduzidos), [`avaliacao.md`](../experimentos/sprint05/resultados/avaliacao.md) e [`treino.md`](../experimentos/sprint05/resultados/treino.md).
+Resultados correspondentes: [`experimentos/sprint05/resultados/livro.md`](../experimentos/sprint05/resultados/livro.md) (exemplos do livro reproduzidos), [`avaliacao.md`](../experimentos/sprint05/resultados/avaliacao.md), [`treino.md`](../experimentos/sprint05/resultados/treino.md), [`geracao.md`](../experimentos/sprint05/resultados/geracao.md) e [`checkpoint.md`](../experimentos/sprint05/resultados/checkpoint.md).

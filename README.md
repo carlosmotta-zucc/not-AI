@@ -39,7 +39,7 @@ Cada etapa do pipeline corresponde a uma sprint. O que é implementado em uma sp
 | Sprint 2 | Cap. 2     | Tokenização, embeddings, positional embeddings, DataLoader  | Concluída                     |
 | Sprint 3 | Cap. 3     | Self-Attention, Causal Attention, Multi-Head Attention      | Concluída                 |
 | Sprint 4 | Cap. 4     | Arquitetura GPT, Transformer Block, LayerNorm, FFN, geração | Concluída                  |
-| Sprint 5 | Cap. 5     | Treinamento, função de perda, otimizadores, avaliação       | Em andamento                  |
+| Sprint 5 | Cap. 5     | Treinamento, função de perda, otimizadores, avaliação       | Concluída                     |
 | Sprint 6 | Cap. 6 e 7 | Fine-tuning, integração, apresentação                       | Não iniciada                  |
 
 Ciclo de cada sprint: **Leitura → Glossário → Quiz → Implementação → Experimentação → Análise**.
@@ -67,7 +67,7 @@ A Sprint 2 foi dividida em duas frentes:
 │   ├── transformer/        # Sprint 4 — LayerNorm, GELU, FeedForward, TransformerBlock
 │   ├── model/              # Sprint 4 — GPTConfig e GPTModel: Token IDs → logits
 │   ├── generation/         # Sprint 4 — logits → próximo token; geração autoregressiva
-│   └── training/           # Sprint 5 — perda, perplexidade, laço de treino, TrainingConfig
+│   └── training/           # Sprint 5 — perda, perplexidade, laço de treino, TrainingConfig, checkpoints
 ├── tests/                  # testes das implementações de src/ e checkpoints do livro
 ├── notebooks/              # exploração e pipeline ponta a ponta, um diretório por sprint
 │   ├── sprint02/
@@ -93,6 +93,7 @@ A Sprint 2 foi dividida em duas frentes:
 ├── glossarios/             # glossário cumulativo, um diretório por integrante
 │   ├── carlos/
 │   └── joao/
+├── checkpoints/            # modelos treinados (não versionados, gerados pelo script da Sprint 5)
 └── data/                   # corpora (não versionados, baixados sob demanda)
 ```
 
@@ -150,6 +151,7 @@ python tests/test_generation.py
 python tests/test_gpt_pipeline.py
 python tests/test_book_checkpoints.py      # monta o GPT de 124M (~650 MB de RAM)
 python tests/test_training.py
+python tests/test_checkpoint.py
 python tests/test_book_checkpoints_ch5.py  # treina o GPT de 124M por 6 passos (~3 GB de RAM, ~30 s)
 
 # experimentos da Sprint 2 — regeneram experimentos/sprint02/resultados/
@@ -167,7 +169,9 @@ python experimentos/sprint04/geracao_experimentos.py
 # experimentos da Sprint 5 — regeneram experimentos/sprint05/resultados/ e as figuras
 python experimentos/sprint05/livro_exemplos.py          # treina o GPT de 124M do livro (~4 min)
 python experimentos/sprint05/avaliacao_experimentos.py  # ~2 min
-python experimentos/sprint05/treino_experimentos.py     # ~15 min
+python experimentos/sprint05/treino_experimentos.py     # ~22 min
+python experimentos/sprint05/geracao_experimentos.py    # ~14 min
+python experimentos/sprint05/checkpoint_experimentos.py # ~6 min; grava checkpoints/sprint05-base-10-epocas.pth
 ```
 
 Os corpora são baixados para `data/` na primeira execução; nada precisa ser obtido à mão.
@@ -194,6 +198,9 @@ Cada entrada traz definição, função no modelo, relação com outros conceito
 | -------- | --------------------------------------------------------- | -------------------------------------------------- |
 | 1        | [glossário](glossarios/carlos/glossario-cap1-llm.md)      | [glossário](glossarios/joao/Glossario-cap01.md)    |
 | 2        | [glossário](glossarios/carlos/glossario-cap2-dados-texto.md) | [glossário](glossarios/joao/Glossario-cap02.md)    |
+| 3        | [glossário](glossarios/carlos/glossario-cap3-atencao.md)  | [glossário](glossarios/joao/Glossario_cap03.md)    |
+| 4        | [glossário](glossarios/carlos/glossario-cap4-gpt.md)      | [glossário](glossarios/joao/Glossario_cap04.md)    |
+| 5        | [glossário](glossarios/carlos/glossario-cap5-pretreinamento.md) | [glossário](glossarios/joao/Glossario_cap05.md)    |
 
 ## Experimentos
 
@@ -226,6 +233,8 @@ Análises publicadas:
 | 5      | [Avaliação do modelo](docs/sprint05/01-avaliacao-do-modelo.md)       | Cross-entropy, perplexidade, perdas de treino e validação            |
 | 5      | [Treinamento](docs/sprint05/02-treinamento.md)                       | Laço de treino, AdamW, hiperparâmetros, reprodução do livro          |
 | 5      | [Experimentos de treinamento](docs/sprint05/03-experimentos-de-treinamento.md) | Épocas, taxa de aprendizado, lote, regularização, sobreajuste, custo |
+| 5      | [Estratégias de geração](docs/sprint05/04-estrategias-de-geracao.md) | Gulosa, amostragem, temperatura e top-k; efeito da estratégia x efeito do treino |
+| 5      | [Salvamento e carregamento](docs/sprint05/05-salvamento-e-carregamento.md) | Conteúdo do arquivo, ida e volta, geração com o modelo carregado, retomada do treino |
 
 ## Avaliação
 
